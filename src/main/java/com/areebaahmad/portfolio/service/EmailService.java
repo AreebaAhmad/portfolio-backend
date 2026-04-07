@@ -1,5 +1,6 @@
 package com.areebaahmad.portfolio.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -12,15 +13,17 @@ public class EmailService {
 	private final JavaMailSender mailSender;
 
 	// Get emails from application.properties
-	private final String fromEmail = System.getenv("EMAIL_FROM");
-	private final String toEmail = System.getenv("EMAIL_TO");
+	@Value("${EMAIL_FROM}")
+	private String fromEmail;
+
+	@Value("${EMAIL_TO}")
+	private String toEmail;
 
 	public EmailService(JavaMailSender mailSender) {
 		this.mailSender = mailSender;
 	}
 
 	public void sendEmail(Contact contact) {
-		System.out.println("DEBUG: " + contact.getName() + " | " + contact.getEmail() + " | " + contact.getMessage());
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setFrom(fromEmail);
 		message.setReplyTo(contact.getEmail());
