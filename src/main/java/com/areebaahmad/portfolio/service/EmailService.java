@@ -21,7 +21,7 @@ public class EmailService {
 		Resend resend = new Resend(resendApiKey);
 
 		CreateEmailOptions params = CreateEmailOptions.builder().from("onboarding@resend.dev").to(toEmail)
-				.subject("New Portfolio Message From " + contact.getName())
+				.replyTo(contact.getEmail()).subject("New Portfolio Message From " + contact.getName())
 				.html("<p><b>Name:</b> " + contact.getName() + "</p>" + "<p><b>Email:</b> " + contact.getEmail()
 						+ "</p>" + "<p><b>Message:</b><br>" + contact.getMessage() + "</p>")
 				.build();
