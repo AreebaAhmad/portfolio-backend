@@ -12,7 +12,7 @@ public class EmailService {
 
 	private final JavaMailSender mailSender;
 
-	// Get emails from application.properties
+	// Get email from application.properties
 	@Value("${EMAIL_FROM}")
 	private String fromEmail;
 
