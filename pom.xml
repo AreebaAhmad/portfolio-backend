@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.areebaahmad.portfolio</groupId>
-	<artifactId>PortfolioBacked</artifactId>
+	<artifactId>portfolio-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>backend</name>
 	<description>Portfolio Backend API</description>
