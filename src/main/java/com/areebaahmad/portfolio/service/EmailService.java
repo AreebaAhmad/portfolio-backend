@@ -1,37 +1,31 @@
 package com.areebaahmad.portfolio.service;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.areebaahmad.portfolio.entity.Contact;
+import com.resend.Resend;
+import com.resend.core.exception.ResendException;
+import com.resend.services.emails.model.CreateEmailOptions;
 
 @Service
 public class EmailService {
 
-	private final JavaMailSender mailSender;
-
-	// Get email from application.properties
-	@Value("${EMAIL_FROM}")
-	private String fromEmail;
+	@Value("${RESEND_API_KEY}")
+	private String resendApiKey;
 
 	@Value("${EMAIL_TO}")
 	private String toEmail;
 
-	public EmailService(JavaMailSender mailSender) {
-		this.mailSender = mailSender;
-	}
+	public void sendEmail(Contact contact) throws ResendException {
+		Resend resend = new Resend(resendApiKey);
 
-	public void sendEmail(Contact contact) {
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setFrom(fromEmail);
-		message.setReplyTo(contact.getEmail());
-		message.setTo(toEmail);
-		message.setSubject("New Portfolio Message From " + contact.getName());
-		message.setText("Name: " + contact.getName() + "\n" + "Email: " + contact.getEmail() + "\nMessage:\n"
-				+ contact.getMessage());
-		mailSender.send(message);
-	}
+		CreateEmailOptions params = CreateEmailOptions.builder().from("onboarding@resend.dev").to(toEmail)
+				.subject("New Portfolio Message From " + contact.getName())
+				.html("<p><b>Name:</b> " + contact.getName() + "</p>" + "<p><b>Email:</b> " + contact.getEmail()
+						+ "</p>" + "<p><b>Message:</b><br>" + contact.getMessage() + "</p>")
+				.build();
 
+		resend.emails().send(params);
+	}
 }

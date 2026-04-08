@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.areebaahmad.portfolio.entity.Contact;
 import com.areebaahmad.portfolio.repository.ContactRepository;
+import com.resend.core.exception.ResendException;
 
 @Service
 public class ContactService {
@@ -43,12 +44,25 @@ public class ContactService {
 	}
 
 	public String processContact(Contact contact) {
+
 		if (isSpam(contact.getMessage())) {
+
 			return "Message flagged as spam, not sent!";
 		}
 
 		contactRepository.save(contact);
-		emailService.sendEmail(contact);
+
+		try {
+
+			emailService.sendEmail(contact);
+
+		} catch (ResendException e) {
+
+			e.printStackTrace();
+
+			return "Message saved but email failed to send!";
+		}
+
 		return "Message sent successfully!";
 	}
 
